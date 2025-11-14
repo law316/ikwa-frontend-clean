@@ -1,0 +1,241 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Primary Brand Colors */
+  --color-black: #000000;
+  --color-white: #ffffff;
+  /* Grayscale Variations */
+  --color-gray-900: #111111;
+  --color-gray-800: #1f1f1f;
+  --color-gray-700: #2d2d2d;
+  --color-gray-600: #404040;
+  --color-gray-500: #737373;
+  --color-gray-400: #a3a3a3;
+  --color-gray-300: #d4d4d4;
+  --color-gray-200: #e5e5e5;
+  --color-gray-100: #f5f5f5;
+  --color-gray-50: #fafafa;
+  /* Semantic Colors */
+  --color-primary: var(--color-black);
+  --color-secondary: var(--color-white);
+  --color-background: var(--color-white);
+  --color-surface: var(--color-white);
+  --color-text: var(--color-black);
+  --color-text-secondary: var(--color-gray-600);
+  --color-border: var(--color-gray-300);
+  --color-shadow: rgba(0, 0, 0, 0.1);
+  
+  /* Typography */
+  --font-vintage: 'Times New Roman', Times, serif;
+  --font-heading: 'Times New Roman', Times, serif;
+  
+  /* Spacing */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  
+  /* Border Radius */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 1rem;
+  
+  /* Transitions */
+  --transition-fast: 150ms ease;
+  --transition-normal: 300ms ease;
+  --transition-slow: 500ms ease;
+  
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Base Styles */
+body {
+  font-family: var(--font-vintage);
+  background-color: var(--color-background);
+  color: var(--color-text);
+  line-height: 1.5;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  color: var(--color-primary);
+}
+
+/* Vintage Button Styles */
+.vintage-button {
+  @apply px-4 py-2 rounded-md border-2 border-black 
+         bg-white text-black font-medium
+         hover:bg-gray-100 transition-colors
+         focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2;
+}
+
+.vintage-button-primary {
+  @apply bg-black text-white hover:bg-gray-900;
+}
+
+/* Vintage Card Styles */
+.vintage-card {
+  @apply bg-white rounded-lg border-2 border-gray-200
+         shadow-md hover:shadow-lg transition-shadow
+         p-4;
+}
+
+/* Vintage Input Styles */
+.vintage-input {
+  @apply w-full px-3 py-2 rounded-md border-2 border-gray-200
+         bg-white text-black
+         focus:outline-none focus:ring-2 focus:ring-black;
+}
+
+/* Vintage Select Styles */
+.vintage-select {
+  @apply w-full px-3 py-2 rounded-md border-2 border-gray-200
+         bg-white text-black
+         focus:outline-none focus:ring-2 focus:ring-black;
+}
+
+/* Vintage Badge Styles */
+.vintage-badge {
+  @apply inline-flex items-center px-2.5 py-0.5 rounded-full
+         text-xs font-medium bg-gray-100 text-black;
+}
+
+/* Vintage Link Styles */
+.vintage-link {
+  @apply text-gray-700 hover:text-black
+         underline decoration-gray-300 hover:decoration-black
+         transition-colors;
+}
+
+/* Vintage Animation Classes */
+.vintage-fade {
+  @apply transition-opacity duration-300;
+}
+
+.vintage-slide {
+  @apply transition-transform duration-300;
+}
+
+.vintage-scale {
+  @apply transition-transform duration-300 hover:scale-105;
+}
+
+/* Vintage Loading Spinner */
+.vintage-spinner {
+  @apply w-8 h-8 border-4 border-gray-200 border-t-black
+         rounded-full animate-spin;
+}
+
+/* Vintage Grid Layout */
+.vintage-grid {
+  @apply grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4
+         gap-4 p-4;
+}
+
+/* Vintage Container */
+.vintage-container {
+  @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+/* Vintage Section */
+.vintage-section {
+  @apply py-12 sm:py-16 lg:py-20;
+}
+
+/* Vintage Heading */
+.vintage-heading {
+  @apply text-3xl sm:text-4xl lg:text-5xl font-bold
+         text-black mb-8 text-center;
+}
+
+/* Vintage Subheading */
+.vintage-subheading {
+  @apply text-xl sm:text-2xl text-black mb-6;
+}
+
+/* Vintage Paragraph */
+.vintage-paragraph {
+  @apply text-gray-700 leading-relaxed mb-4;
+}
+
+/* Vintage List */
+.vintage-list {
+  @apply space-y-2 list-disc list-inside text-gray-700;
+}
+
+/* Vintage Table */
+.vintage-table {
+  @apply min-w-full divide-y divide-gray-200;
+}
+
+.vintage-table th {
+  @apply px-6 py-3 bg-white text-left text-xs font-medium
+         text-black uppercase tracking-wider;
+}
+
+.vintage-table td {
+  @apply px-6 py-4 whitespace-nowrap text-sm text-gray-700;
+}
+
+/* Vintage Form Group */
+.vintage-form-group {
+  @apply mb-4;
+}
+
+.vintage-label {
+  @apply block text-sm font-medium text-black mb-1;
+}
+
+/* Vintage Alert */
+.vintage-alert {
+  @apply p-4 rounded-md border-2 mb-4;
+}
+
+.vintage-alert-success {
+  @apply bg-gray-100 border-gray-300 text-gray-700;
+}
+
+.vintage-alert-error {
+  @apply bg-gray-100 border-gray-300 text-gray-700;
+}
+
+.vintage-alert-warning {
+  @apply bg-gray-100 border-gray-300 text-gray-700;
+}
+
+.vintage-alert-info {
+  @apply bg-white border-gray-200 text-black;
+}
+
+/* Responsive Utilities */
+@media (max-width: 640px) {
+  .vintage-container {
+    @apply px-4;
+  }
+  
+  .vintage-heading {
+    @apply text-2xl;
+  }
+  
+  .vintage-subheading {
+    @apply text-lg;
+  }
+}
+
+/* Print Styles */
+@media print {
+  .vintage-button,
+  .vintage-badge {
+    @apply border border-gray-300 bg-white text-gray-900;
+  }
+  
+  .vintage-card {
+    @apply border border-gray-300 shadow-none;
+  }
+} 
