@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#B45309" />
+  <meta
+    name="description"
+    content="LIKWAPU - Vintage Fashion Offline"
+  />
+  <title>Offline - LIKWAPU</title>
+  <link rel="stylesheet" href="offline.css" />
+  <style>
+    body {
+      font-family: 'Courier New', monospace;
+      background-color: #FFFBEB;
+      color: #B45309;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+      text-align: center;
+    }
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+    p {
+      font-size: 1.2rem;
+      margin-bottom: 2rem;
+    }
+    .retro-border {
+      border: 3px solid #B45309;
+      padding: 2rem;
+      border-radius: 8px;
+      background-color: #FEF3C7;
+    }
+  </style>
+</head>
+<body>
+  <div class="retro-border">
+    <h1>You're Offline</h1>
+    <p>Please check your internet connection and try again.</p>
+    <p>We'll be here when you're back online!</p>
+  </div>
+  <script>
+    // Check for online status
+    window.addEventListener('online', () => {
+      window.location.reload();
+    });
+  </script>
+</body>
+</html> 

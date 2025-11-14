@@ -1,0 +1,81 @@
+{
+  "short_name": "LIKWAPU",
+  "name": "LIKWAPU - Vintage Fashion",
+  "description": "Your premier destination for vintage-inspired t-shirts that capture the essence of bygone eras.",
+  "icons": [
+    {
+      "src": "favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "logo192.png",
+      "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "logo512.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any maskable"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff",
+  "orientation": "portrait",
+  "categories": ["fashion", "shopping", "vintage"],
+  "screenshots": [
+    {
+      "src": "screenshot1.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "label": "Home screen of LIKWAPU"
+    },
+    {
+      "src": "screenshots/catalog.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "platform": "narrow",
+      "label": "Product catalog with vintage items"
+    },
+    {
+      "src": "screenshots/product.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "platform": "narrow",
+      "label": "Product details with vintage styling"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "New Arrivals",
+      "short_name": "New",
+      "description": "View the latest vintage arrivals",
+      "url": "/new-arrivals",
+      "icons": [{ "src": "icons/new.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "My Wishlist",
+      "short_name": "Wishlist",
+      "description": "View your saved items",
+      "url": "/wishlist",
+      "icons": [{ "src": "icons/wishlist.png", "sizes": "192x192" }]
+    }
+  ],
+  "related_applications": [],
+  "prefer_related_applications": false,
+  "iarc_rating_id": "e84b072d-71b3-4d3e-86ae-31a8ce4e53b7",
+  "share_target": {
+    "action": "/share-target",
+    "method": "POST",
+    "enctype": "multipart/form-data",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url"
+    }
+  }
+}

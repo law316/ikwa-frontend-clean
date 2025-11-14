@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1080">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #000;
+      }
+    </style>
+  </defs>
+  <g>
+    <!-- Outer circle -->
+    <circle class="cls-1" cx="540" cy="540" r="520" fill="none" stroke="#000" stroke-width="40"/>
+    
+    <!-- Letter L -->
+    <path class="cls-1" d="M200,200 L200,800 L450,800 L450,720 L280,720 L280,200 Z"/>
+    
+    <!-- Letter L (second) -->
+    <path class="cls-1" d="M500,200 L500,800 L750,800 L750,720 L580,720 L580,200 Z"/>
+    
+    <!-- Decorative needle/pin element -->
+    <line class="cls-1" x1="540" y1="150" x2="540" y2="930" stroke="#000" stroke-width="8"/>
+    <circle class="cls-1" cx="540" cy="150" r="25"/>
+    
+    <!-- Decorative swirl -->
+    <path class="cls-1" d="M800,350 Q850,300 900,350 Q950,400 900,450 Q850,500 800,450" fill="none" stroke="#000" stroke-width="6"/>
+  </g>
+</svg>
