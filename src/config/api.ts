@@ -2,39 +2,39 @@ const API_BASE_URL = "https://likwapuecommerce.fly.dev";
 export default API_BASE_URL;
 
 export const API_ENDPOINTS = {
-  // Auth
+  // AUTH (Spring Boot)
   login: "/api/login",
   register: "/api/registration/register",
 
-  // Products
+  // PRODUCTS
   products: "/api/products",
   product: (id: string) => `/api/products/${id}`,
 
-  // Categories
+  // CATEGORIES
   categories: "/api/categories",
 
-  // Cart
+  // CART
   cart: "/api/cart",
   addToCart: "/api/cart/add",
   updateCart: "/api/cart/update",
   removeFromCart: (itemId: string) => `/api/cart/remove/${itemId}`,
 
-  // Reviews
+  // REVIEWS
   reviews: (productId: string) => `/api/products/${productId}/reviews`,
   addReview: (productId: string) => `/api/products/${productId}/reviews/add`,
 
-  // Orders (your api.ts calls these)
+  // ORDERS
   orders: "/api/orders",
   createOrder: "/api/orders/create",
 
-  // User profile
+  // USER PROFILE
   updateProfile: "/api/user/update",
 
-  // Wishlist
+  // WISHLIST
   wishlist: "/api/wishlist",
   wishlistAdd: "/api/wishlist/add",
   wishlistRemove: "/api/wishlist/remove",
 
-  // Contact
+  // CONTACT
   contact: "/api/contact",
 };
