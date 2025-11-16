@@ -1,69 +1,38 @@
-import React, { createContext, useContext, useReducer, useEffect } from 'react';
-import { authService, userService } from '../services/api';
-import { toast } from 'react-hot-toast';
+import React, { createContext, useContext, useReducer, useEffect } from "react";
+import { authService, userService } from "../services/api";
+import { toast } from "react-hot-toast";
 
 const UserContext = createContext();
 
 const initialState = {
   user: null,
   isAuthenticated: false,
-  preferences: {
-    theme: 'light',
-    notifications: true,
-    language: 'en'
-  },
   loading: false,
-  error: null
+  error: null,
 };
 
 const userReducer = (state, action) => {
   switch (action.type) {
-    case 'LOGIN_START':
-      return {
-        ...state,
-        loading: true,
-        error: null
-      };
+    case "AUTH_START":
+      return { ...state, loading: true, error: null };
 
-    case 'LOGIN_SUCCESS':
+    case "LOGIN_SUCCESS":
       return {
         ...state,
-        user: action.payload.user,
+        user: action.payload,
         isAuthenticated: true,
         loading: false,
-        error: null
+        error: null,
       };
 
-    case 'LOGIN_FAILURE':
-      return {
-        ...state,
-        loading: false,
-        error: action.payload
-      };
+    case "REGISTER_SUCCESS":
+      return { ...state, loading: false, error: null };
 
-    case 'LOGOUT':
-      return {
-        ...initialState,
-        preferences: state.preferences
-      };
+    case "AUTH_ERROR":
+      return { ...state, loading: false, error: action.payload };
 
-    case 'UPDATE_PREFERENCES':
-      return {
-        ...state,
-        preferences: {
-          ...state.preferences,
-          ...action.payload
-        }
-      };
-
-    case 'UPDATE_PROFILE':
-      return {
-        ...state,
-        user: {
-          ...state.user,
-          ...action.payload
-        }
-      };
+    case "LOGOUT":
+      return { ...initialState };
 
     default:
       return state;
@@ -72,150 +41,101 @@ const userReducer = (state, action) => {
 
 export const UserProvider = ({ children }) => {
   const [state, dispatch] = useReducer(userReducer, initialState, () => {
-    const savedUser = localStorage.getItem('user');
-    const savedPreferences = localStorage.getItem('preferences');
+    const savedUser = localStorage.getItem("user");
+    const token = localStorage.getItem("token");
+
     return {
       ...initialState,
       user: savedUser ? JSON.parse(savedUser) : null,
-      isAuthenticated: !!savedUser,
-      preferences: savedPreferences ? JSON.parse(savedPreferences) : initialState.preferences
+      isAuthenticated: !!token,
     };
   });
 
+  // Persist user
   useEffect(() => {
     if (state.user) {
-      localStorage.setItem('user', JSON.stringify(state.user));
+      localStorage.setItem("user", JSON.stringify(state.user));
     } else {
-      localStorage.removeItem('user');
+      localStorage.removeItem("user");
     }
   }, [state.user]);
 
+  // --- AUTH METHODS -----------------------------------
+
+  const register = async (form) => {
+    dispatch({ type: "AUTH_START" });
+
+    try {
+      const payload = {
+        firstName: form.firstName,
+        lastName: form.lastName,
+        email: form.email,
+        password: form.password,
+        confirmPassword: form.confirmPassword,
+        country: form.country,
+      };
+
+      const res = await authService.register(payload);
+
+      dispatch({ type: "REGISTER_SUCCESS" });
+      toast.success("Registration successful!");
+
+      return res; // RegisterPage will handle redirect
+    } catch (err) {
+      const msg =
+        err.response?.data?.message || err.message || "Registration failed";
+      dispatch({ type: "AUTH_ERROR", payload: msg });
+      toast.error(msg);
+      throw err;
+    }
+  };
+
   const login = async (credentials) => {
-    dispatch({ type: 'LOGIN_START' });
+    dispatch({ type: "AUTH_START" });
+
     try {
-      // Support both email and username fields for broader backend compatibility
-      const reqCredentials = {
-        email: credentials.email,
-        password: credentials.password,
-        username: credentials.email || credentials.username,
-      };
-      const response = await authService.login(reqCredentials);
-      const payload = response; // normalized by authService
+      const res = await authService.login(credentials);
 
-      // Short-circuit on explicit failure per backend contract
-      if (payload?.success === false) {
-        const message = payload?.message || 'Login failed';
-        throw new Error(message);
-      }
+      const token = res?.token;
+      const user = res?.user;
 
-      let token = payload?.token;
-      let user = payload?.user;
+      if (!token || !user)
+        throw new Error("Invalid login response from backend");
 
-      // If backend uses cookie-based sessions and doesn't return a user, try fetching profile
-      if (!user) {
-        try {
-          const profileResp = await userService.getProfile();
-          const p = profileResp?.data ?? profileResp;
-          user = p?.user || p?.data || p?.profile || p;
-        } catch (_) {
-          // graceful fallback; leave user as undefined
-        }
-      }
+      localStorage.setItem("token", token);
+      localStorage.setItem("user", JSON.stringify(user));
 
-      // Fallback: if success with no user data, synthesize minimal user from credentials
-      if (!user && (payload?.success || token) && reqCredentials.email) {
-        user = { email: reqCredentials.email };
-      }
+      dispatch({ type: "LOGIN_SUCCESS", payload: user });
 
-      // Require either a token or user or a success indicator
-      if (!token && !user && !payload?.success) {
-        const message = payload?.message || 'Login failed';
-        throw new Error(message);
-      }
+      toast.success("Welcome back!");
 
-      if (token) {
-        localStorage.setItem('token', token);
-        localStorage.setItem('authToken', token);
-      }
-
-      dispatch({ type: 'LOGIN_SUCCESS', payload: { user } });
-      toast.success('Login successful!');
       return user;
-    } catch (error) {
-      const message = error.response?.data?.message || error.message || 'Login failed';
-      dispatch({ type: 'LOGIN_FAILURE', payload: message });
-      toast.error(message);
-      throw error;
+    } catch (err) {
+      const msg =
+        err.response?.data?.message || err.message || "Login failed";
+      dispatch({ type: "AUTH_ERROR", payload: msg });
+      toast.error(msg);
+      throw err;
     }
   };
 
-  const register = async (userData) => {
-    dispatch({ type: 'LOGIN_START' });
-    try {
-      const reqData = {
-        ...userData,
-        firstname: userData.firstName ?? userData.firstname,
-        lastname: userData.lastName ?? userData.lastname,
-        password_confirmation: userData.repeatedPassword ?? userData.password_confirmation ?? userData.confirmPassword,
-        confirmPassword: userData.repeatedPassword ?? userData.confirmPassword,
-        username: userData.email,
-      };
-      const response = await authService.register(reqData);
-      const payload = response;
-
-      if (payload?.success === false) {
-        const message = payload?.message || 'Registration failed';
-        throw new Error(message);
-      }
-
-      // Do not auto-login after registration; keep user unauthenticated
-      dispatch({ type: 'LOGOUT' });
-      toast.success('User registered successfully');
-      return payload;
-    } catch (error) {
-      const message = error.response?.data?.message || error.message || 'Registration failed';
-      dispatch({ type: 'LOGIN_FAILURE', payload: message });
-      toast.error(message);
-      throw error;
-    }
+  const logout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    dispatch({ type: "LOGOUT" });
+    toast.success("Logged out");
   };
 
-  const logout = async () => {
+  const updateProfile = async (data) => {
     try {
-      await authService.logout();
-    } catch (error) {
-      console.error('Logout error:', error);
-    } finally {
-      localStorage.removeItem('token');
-      dispatch({ type: 'LOGOUT' });
-      toast.success('Logged out successfully');
-    }
-  };
-
-  const updateProfile = async (profileData) => {
-    try {
-      const response = await userService.updateProfile(profileData);
-      dispatch({ type: 'UPDATE_PROFILE', payload: response.data });
-      toast.success('Profile updated successfully');
-      return response.data;
-    } catch (error) {
-      const message = error.response?.data?.message || 'Failed to update profile';
-      toast.error(message);
-      throw error;
-    }
-  };
-
-  const updatePreferences = async (preferences) => {
-    try {
-      const response = await userService.updatePreferences(preferences);
-      dispatch({ type: 'UPDATE_PREFERENCES', payload: response.data });
-      localStorage.setItem('preferences', JSON.stringify(response.data));
-      toast.success('Preferences updated successfully');
-      return response.data;
-    } catch (error) {
-      const message = error.response?.data?.message || 'Failed to update preferences';
-      toast.error(message);
-      throw error;
+      const res = await userService.updateProfile(data);
+      localStorage.setItem("user", JSON.stringify(res));
+      dispatch({ type: "LOGIN_SUCCESS", payload: res });
+      toast.success("Profile updated");
+      return res;
+    } catch (err) {
+      toast.error("Update failed");
+      throw err;
     }
   };
 
@@ -227,7 +147,6 @@ export const UserProvider = ({ children }) => {
         register,
         logout,
         updateProfile,
-        updatePreferences,
       }}
     >
       {children}
@@ -235,12 +154,6 @@ export const UserProvider = ({ children }) => {
   );
 };
 
-export const useUser = () => {
-  const context = useContext(UserContext);
-  if (!context) {
-    throw new Error('useUser must be used within a UserProvider');
-  }
-  return context;
-};
+export const useUser = () => useContext(UserContext);
 
 export default UserContext;

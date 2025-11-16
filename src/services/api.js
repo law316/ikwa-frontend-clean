@@ -344,8 +344,8 @@ export const authService = {
   login: async (data) => {
     const pathsToTry = [
       API_ENDPOINTS.login,
-      '/api/auth/login',
-      '/api/registration/login',
+      
+      '/api/login',
     ];
 
     let lastError;
